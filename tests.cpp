@@ -5,6 +5,7 @@
 
 //0 1 2     Tie/ X wins/ O wins
 // -1 error
+
 int playGame(std::vector<int> a)
 {
     if(a.size() < 0 || a.size() > 9)
@@ -148,5 +149,23 @@ TEST(suit5, test3)
   std::vector<int> a = {1,9,3,7};
   const int result = playGame(a);
   ASSERT_EQ(result,-1);
+}
+
+//suit 6 - testing placing an
+TEST(suit6,test1)
+{
+  Board game;
+  game.makeMove(5);
+  game.makeMove(3);
+  game.makeMove(9);
+
+  game.removeMove(5);
+  ASSERT_EQ(game.get_square(1,1), ' ');
+
+  game.removeMove(9);
+  ASSERT_EQ(game.get_square(2,2), ' ');
+
+  ASSERT_EQ(game.get_square(0,2),'O');
+
 }
 
