@@ -15,9 +15,9 @@ int playGame(std::vector<int> a)
     }
     Board game;
     int i =0;
-    while(game.checkWinDiagonal() == -1 && game.checkWinVetrical() == -1 && game.checkWinHorizontal() == -1)
+    while(game.check_win() == -1)
     {
-        if(game.makeMove(a[i]) == -1)
+        if(game.make_move(a[i]) == -1)
         {
             //std::cout<<"Illegal move\n";
             return -1;
@@ -25,7 +25,7 @@ int playGame(std::vector<int> a)
         i++;
     }
     //game.announce();
-    return game.getWin();
+    return game.get_win();
 }
 
 /*
@@ -151,21 +151,59 @@ TEST(suit5, test3)
   ASSERT_EQ(result,-1);
 }
 
-//suit 6 - testing placing an
-TEST(suit6,test1)
+//suit 6 - testing remove_move
+TEST(suit6, test1)
 {
   Board game;
-  game.makeMove(5);
-  game.makeMove(3);
-  game.makeMove(9);
+  game.make_move(2);
+  game.make_move(3);
+  game.make_move(9);
 
-  game.removeMove(5);
-  ASSERT_EQ(game.get_square(1,1), ' ');
+  int turns = game.get_turns();
+  ASSERT_EQ(turns,3);
 
-  game.removeMove(9);
-  ASSERT_EQ(game.get_square(2,2), ' ');
+  game.remove_move(3);
+  game.remove_move(5);
 
-  ASSERT_EQ(game.get_square(0,2),'O');
+  turns = game.get_turns();
+  ASSERT_EQ(turns,2);
+
+  ASSERT_EQ(' ', game.get_square(0,2));
+}
+
+//suit 7 - not used
+
+//suit 8 - testing next_moves function
+TEST(suit8, test1)
+{
+  Board game;
+  game.make_move(5);
+  game.make_move(1);
+  game.make_move(9);
+  game.make_move(7);
+
+  std::vector<int> my_vec = game.next_moves();
+  ASSERT_EQ(my_vec.size(),5);
+  ASSERT_EQ(my_vec[0],2);
+  ASSERT_EQ(my_vec[1],3);
+  ASSERT_EQ(my_vec[2],4);
+  ASSERT_EQ(my_vec[3],6);
+  ASSERT_EQ(my_vec[4],8);
+
+  game.remove_move(7);
+  game.remove_move(1);
+
+  my_vec = game.next_moves();
+  
+  ASSERT_EQ(my_vec.size(),7);
+  ASSERT_EQ(my_vec[0],1);
+  ASSERT_EQ(my_vec[1],2);
+  ASSERT_EQ(my_vec[2],3);
+  ASSERT_EQ(my_vec[3],4);
+  ASSERT_EQ(my_vec[4],6);
+  ASSERT_EQ(my_vec[5],7);
+  ASSERT_EQ(my_vec[6],8);
 
 }
+
 

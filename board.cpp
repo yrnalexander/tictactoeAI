@@ -1,12 +1,33 @@
-#include"include/board.h"
+#include "include/board.h"
 
+int index_hint(int x, int y)
+{
+    if(x == 0 && y == 0)
+        return 1;
+    if(x == 0 && y == 1)
+        return 2;
+    if(x == 0 && y == 2)
+        return 3;
+    if(x == 1 && y == 0)
+        return 4;
+    if(x == 1 && y == 1)
+        return 5;
+    if(x == 1 && y == 2)
+        return 6;
+    if(x == 2 && y == 0)
+        return 7;
+    if(x == 2 && y == 1)
+        return 8;
+    if(x == 2 && y == 2)
+        return 9;
+    return -1;
+}
 
 Board::Board()
 {
-    
-    for(int i = 0; i<3 ;i++)
+    for (int i = 0; i < 3; i++)
     {
-        for(int j=0; j<3; j++)
+        for (int j = 0; j < 3; j++)
         {
             board[i][j] = ' ';
         }
@@ -14,443 +35,495 @@ Board::Board()
     win = -1;
     turns = 0;
 }
-/*
-Board::Board(Board& copy)
+//make a move on the board - 1,2,3...9
+//return 0 on success -1 on failure
+int Board::make_move(int n)
 {
-    for(int i=0; i<3; i++)
+    if(n == 1)
     {
-        for(int j=0; j<3; j++)
+        if(board[0][0] == ' ')
         {
-            board[i][j] = copy.board[i][j];
+            if(turns%2 == 0)
+            {
+                board[0][0] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[0][0] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
         }
     }
-    turns = copy.turns;
-    win = copy.win;
+    else if(n == 2)
+    {
+        if(board[0][1] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[0][1] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[0][1] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 3)
+    {
+        if(board[0][2] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[0][2] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[0][2] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 4)
+    {
+        if(board[1][0] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[1][0] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[1][0] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 5)
+    {
+        if(board[1][1] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[1][1] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[1][1] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 6)
+    {
+        if(board[1][2] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[1][2] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[1][2] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 7)
+    {
+        if(board[2][0] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[2][0] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[2][0] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 8)
+    {
+        if(board[2][1] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[2][1] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[2][1] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    else if(n == 9)
+    {
+        if(board[2][2] == ' ')
+        {
+            if(turns%2 == 0)
+            {
+                board[2][2] = 'X';
+                turns++;
+                return 0;
+            }
+            else
+            {
+                board[2][2] = 'O';
+                turns++;
+                return 0;
+            }
+        }
+        else
+        {
+            std::cout<<"Invalid Move";
+            return -1;
+        }
+    }
+    std::cout<<"Invalid move";
+    return -1;
 }
-*/
-char Board::get_square(int x, int y)
+//remove a move
+//return 0 on success -1 on failure
+int Board::remove_move(int n)
 {
-    if(x >=0 && x<3 && y>=0 && y<3)
+    if(n == 1)
     {
-        return board[x][y];
+        if(board[0][0] != ' ')
+        {
+            board[0][0] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
     }
-    else
+    else if(n == 2)
     {
-        return -1;
+        if(board[0][1] != ' ')
+        {
+            board[0][1] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
     }
+    else if(n == 3)
+    {
+        if(board[0][2] != ' ')
+        {
+            board[0][2] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 4)
+    {
+        if(board[1][0] != ' ')
+        {
+            board[1][0] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 5)
+    {
+        if(board[1][1] != ' ')
+        {
+            board[1][1] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 6)
+    {
+        if(board[1][2] != ' ')
+        {
+            board[1][2] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 7)
+    {
+        if(board[2][0] != ' ')
+        {
+            board[2][0] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 8)
+    {
+        if(board[2][1] != ' ')
+        {
+            board[2][1] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    else if(n == 9)
+    {
+        if(board[2][2] != ' ')
+        {
+            board[2][2] = ' ';
+            turns --;
+            return 0;
+        }
+        else
+        {
+            std::cout<<"Invalid remove";
+            return -1;
+        }
+    }
+    std::cout<<"Invalid remove";
+    return -1;
+
 }
-int Board::index_to_int(int x, int y)
+// 0 - Tie / 1 - X / 2 - O / -1 - Still playing
+int Board::check_win()
 {
-    if(x > 2 || x < 0 || y > 2 || y < 0)
+    if (board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'X')
     {
-        std::cout<<"Fatal";
-        exit(1);
-    }
-    if(x == 0 && y == 0)
-    {
+        win = 1;
         return 1;
     }
-    else if(x == 0 && y == 1)
+    else if (board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'O')
     {
+        win = 2;
         return 2;
     }
-    else if(x == 0 && y == 2)
+    else if (board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'X')
     {
-        return 3;
+        win = 1;
+        return 1;
     }
-    else if(x == 1 && y == 0)
+    else if (board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'O')
     {
-        return 4;
+        win = 2;
+        return 2;
     }
-    else if(x == 1 && y == 1)
+    else if (board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'X')
     {
-        return 5;
+        win = 1;
+        return 1;
     }
-    else if(x == 1 && y == 2)
+    else if (board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'O')
     {
-        return 6;
+        win = 2;
+        return 2;
     }
-    else if(x == 2 && y == 0)
+    else if (board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'X')
     {
-        return 7;
+        win = 1;
+        return 1;
     }
-    else if(x == 2 && y == 1)
+    else if (board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'O')
     {
-        return 8;
+        win = 2;
+        return 2;
     }
-    else if(x == 2 && y == 2)
+    else if (board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'X')
     {
-        return 9;
+        win = 1;
+        return 1;
     }
+    else if (board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'O')
+    {
+        win = 2;
+        return 2;
+    }
+    else if (board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'X')
+    {
+        win = 1;
+        return 1;
+    }
+    else if (board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'O')
+    {
+        win = 2;
+        return 2;
+    }
+    else if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'X')
+    {
+        win = 1;
+        return 1;
+    }
+    else if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'O')
+    {
+        win = 2;
+        return 2;
+    }
+    else if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'X')
+    {
+        win = 1;
+        return 1;
+    }
+    else if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'O')
+    {
+        win = 2;
+        return 2;
+    }
+    else if (turns == 9)
+    {
+        win = 0;
+        return 0;
+    }
+    return -1;
 }
-std::vector<int> Board::hasMove()
+// return a vector contating the possible next moves of a state
+std::vector<int> Board::next_moves()
 {
-    std::vector<int> out;
+    std::vector<int> output;
     for(int i=0; i<3; i++)
     {
         for(int j=0; j<3; j++)
         {
             if(board[i][j] == ' ')
             {
-                int result = index_to_int(i,j);
-                out.push_back(result);
-
+                int move = index_hint(i,j);
+                output.push_back(move);
             }
         }
     }
-    return out;
-}
-int Board::place(int x, int y)
-{
-    if(board[x][y] == 'X' || board[x][y] == 'O')
-    {
-        return -1;
-    }
-    else
-    {
-        if(turns%2 == 0)
-        {
-            board[x][y] = 'X';
-        }
-        else
-        {
-            board[x][y] = 'O';
-        }
-        turns++;
-        return 0;
-    }
-
+    return output;
 }
 
-int Board::empty(int x, int y)
+//getters
+char Board::get_square(int x, int y)
 {
     if(x < 0 || x > 2 || y < 0 || y > 2)
     {
         return -1;
     }
-    if(board[x][y] == ' ')
-    {
-        return -1;
-    }
     else
     {
-        board[x][y] = ' ';
-        turns--;
-        return 0;
+        return board[x][y];
     }
 }
-
-void Board::set_ai(int a)
-{
-    ai_decision = a;
-}
-
-int Board::get_ai()
-{
-    
-    return ai_decision;
-}
-
-int Board::makeMove(int n)
-{
-    switch(n)
-    {
-        case 1:
-            return place(0,0);
-        case 2:
-            return place(0,1);
-        case 3:
-            return place(0,2);
-        case 4:
-            return place(1,0);
-        case 5:
-            return place(1,1);
-        case 6:
-            return place(1,2);
-        case 7:
-            return place(2,0);
-        case 8:
-            return place(2,1);
-        case 9:
-            return place(2,2);
-        default:
-            return -1;
-    }
-    return 0;
-}
-
-int Board::removeMove(int n)
-{
-    switch(n)
-    {
-        case 1:
-            return empty(0,0);
-        case 2:
-            return empty(0,1);
-        case 3:
-            return empty(0,2);
-        case 4:
-            return empty(1,0);
-        case 5:
-            return empty(1,1);
-        case 6:
-            return empty(1,2);
-        case 7:
-            return empty(2,0);
-        case 8:
-            return empty(2,1);
-        case 9:
-            return empty(2,2);
-        default:
-            return -1;
-    }
-    return 0;
-}
-
-int Board::checkWinHorizontal()
-{   
-    
-    if(board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(turns == 9)
-    {
-        win = 0;
-        return 0;
-    }
-    return -1;
-}
-
-int Board::checkWinVetrical()
-{
-    
-    if(board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(turns == 9)
-    {
-        win = 0;
-        return 0;
-    }
-    return -1;
-}
-
-int Board::checkWinDiagonal()
-{
-    
-    if( board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(turns == 9)
-    {
-        win = 0;
-        return 0;
-    }
-    return -1;
-}
-
-int Board::check_win()
-{
-    if(board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[2][0] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[2][1] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if( board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'X')
-    {
-        win = 1;
-        return 1;
-    }
-    else if(board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[2][0] == 'O')
-    {
-        win = 2;
-        return 2;
-    }
-    else if(turns == 9)
-    {
-        win = 0;
-        return 0;
-    }
-    return -1;
-}
-void Board::announce()
-{
-    if(win == 0)
-    {
-        std::cout<<"TIE\n";
-    }
-    else if(win == 1)
-    {
-        std::cout<<"X wins\n";
-    }
-    else if(win == 2)
-    {
-        std::cout<<"O wins\n";
-    }
-    else if(win == -1)
-    {
-        std::cout<<"game not finished\n";
-    }
-    else
-    {
-        std::cout<<"ERROR\n";
-    }
-    
-    
-}
-int Board::getWin()
+int Board::get_win()
 {
     return win;
 }
-
-void Board::printBoard()
+int Board::get_turns()
 {
-    for(int i=0; i<3; i++)
+    return turns;
+}
+
+//setters
+void Board::print_board()
+{
+    for (int i = 0; i < 3; i++)
     {
-        for(int j=0; j<3; j++)
+        for (int j = 0; j < 3; j++)
         {
-            std::cout<<"|";
-            std::cout<<board[i][j];
+            std::cout << "|";
+            std::cout << board[i][j];
         }
-        std::cout<<"|";
-        std::cout<<"\n";
-        
+        std::cout << "|";
+        std::cout << "\n";
     }
-    std::cout<<"\n";
+    std::cout << "\n";
 }

@@ -4,186 +4,145 @@
 #include <random>
 #include <limits>
 
-/*TODO
 
- Try implementig the algo wiht pointers
 
-*/
+int max_value(Board);
+int min_value(Board);
 
-//0 1 2     Tie/ X wins/ O wins
-// -1 error
 
-//Plug a vector of moves and see how the game ends
-int replayGame(std::vector<int> a)
+//returns the value of a decision
+int max_value(Board state)
 {
-    if (a.size() < 5 || a.size() > 9)
-    {
-        std::cout << "invalid game";
-        return -1;
-    }
-    Board game;
-    int i = 0;
-    while (game.checkWinDiagonal() == -1 && game.checkWinVetrical() == -1 && game.checkWinHorizontal() == -1)
-    {
-        if (game.makeMove(a[i]) == -1)
-        {
-            std::cout << "Illegal move\n";
-            return -1;
-        }
-        i++;
-    }
-    game.announce();
-    return game.getWin();
-}
+    if(state.check_win() == 0)
+        return 0;
+    if(state.check_win() == 1)
+        return 10;
+    if(state.check_win() == 2)
+        return -10;
 
-//MiniMax algo
-//Utility X wins  1
-//        O wins -1
-//        Tie     0
-int max_val(Board*);
-int min_val(Board*);
-
-int max_val(Board* state)
-{
-    //sort utility
-    if (state->check_win() != -1)
-    {
-        if (state->getWin() == 0)
-        {
-            return 0;
-        }
-        else if (state->getWin() == 1)
-        {
-            return 1;
-        }
-        else if (state->getWin() == 2)
-        {
-            return -1;
-        }
-    }
-    std::vector<int> moves = state->hasMove();
-    state->makeMove(moves[0]);
-    int v = min_val(state);
-    state->set_ai(0);
-    state->removeMove(moves[0]);
-    for(int i=1; i<moves.size(); i++)
-    {
-        state->makeMove(moves[i]);
-        int temp = min_val(state);
-        state->removeMove(moves[i]);
-        if (temp > v)
-        {
-            v = temp;
-            state->set_ai(i);
-        }
-    }
-    return v;
-
-}
-
-int min_val(Board *state)
-{
-    int v = std::numeric_limits<int>::max();
-    std::vector<int> moves = state->hasMove();
+    int v = -1000;
+    std::vector<int> moves = state.next_moves();
     for(int i=0; i<moves.size(); i++)
-    {   
-        state->makeMove(moves[i]);
-        int temp = max_val(state);
-        state->removeMove(moves[i]);
-        if (temp < v)
+    {
+        state.make_move(moves[i]);
+        int temp = min_value(state);
+        if(temp > v)
         {
             v = temp;
-            state->set_ai(i);
         }
+        state.remove_move(moves[i]);
     }
     return v;
-
 }
 
-int minimax_decision(Board* state)
+//returns the value of a decision
+int min_value(Board state)
 {
-    int v = max_val(state);
-    return state->get_ai();
-}
-
-//Play a 2-player game
-int playGame()
-{
-    Board game;
-    int i = 0;
-    while (game.check_win() == -1)
+    if(state.check_win() == 0)
+        return 0;
+    if(state.check_win() == 1)
+        return 10;
+    if(state.check_win() == 2)
+        return -10;
+    int v = 1000;
+    std::vector<int> moves = state.next_moves();
+    for(int i = 0; i<moves.size(); i++)
     {
-        std::vector<int> my_vec = game.hasMove();
-        for (int i = 0; i < my_vec.size(); i++)
+        state.make_move(moves[i]);
+        int temp = max_value(state);
+        if(temp < v)
         {
-            std::cout << "I can make move:" << my_vec[i] << '\n';
-        }
-        if(i%2 == 0)
-        {
-            int decision = minimax_decision(&game);
-            std::cout<<"best move is: "<<decision<<'\n';
-        }
-        int num;
-        game.printBoard();
-        std::cout << "Choose a move 1-9:";
-        std::cin >> num;
-        if (game.makeMove(num) == -1)
-        {
-            std::cout << "Illegal move\n";
-            continue;
-        }
-        i++;
+            v = temp;
+        }        
+        state.remove_move(moves[i]);
     }
-    game.printBoard();
-    game.announce();
-    return game.getWin();
+    return v;
 }
 
-int playComputer()
+//returns the actual best decision for X
+int minimax_x(Board state)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 9);
-    Board game;
-    int i = 0;
-    while (game.checkWinDiagonal() == -1 && game.checkWinVetrical() == -1 && game.checkWinHorizontal() == -1)
+    int v = -1000;
+    int decision = -1;
+    std::vector<int> moves = state.next_moves();
+    for(int i=0; i<moves.size(); i++)
     {
-        if (i % 2 == 0)
+        state.make_move(moves[i]);
+        int temp = min_value(state);
+        if(temp > v)
         {
-            int num;
-            game.printBoard();
-            std::cout << "Choose a move 1-9:";
-            std::cin >> num;
-            if (game.makeMove(num) == -1)
-            {
-                std::cout << "Illegal move\n";
-                continue;
-            }
-            i++;
+            v = temp;
+            decision = moves[i];
+        }
+        state.remove_move(moves[i]);
+    }
+    return decision;
+}
+
+//returns the actual best decision for X
+int minimax_o(Board state)
+{
+    int v = 1000;
+    int decision = -1;
+    std::vector<int> moves = state.next_moves();
+    for(int i=0; i<moves.size(); i++)
+    {
+        state.make_move(moves[i]);
+        int temp = max_value(state);
+        if(temp < v)
+        {
+            v = temp;
+            decision = moves[i];
+        }
+        state.remove_move(moves[i]);
+    }
+    return decision;
+}
+
+//play a game of tictactoe
+void play_game()
+{
+    Board game;
+    while(game.check_win() == -1)
+    {
+        game.print_board();
+        //Next line determines the player
+        if(game.get_turns()%2 == 0)
+        {
+            int n = minimax_x(game);
+            game.make_move(n);
         }
         else
         {
-            game.printBoard();
-            //put in AI
-            int num = distrib(gen);
-            while (game.makeMove(num) == -1)
-            {
-                num = distrib(gen);
-            }
-            i++;
+            int n;
+            std::cout<<"Choose a move 1-9: ";
+            std::cin>>n;
+            game.make_move(n);
         }
+        std::cout<<'\n';
     }
-    game.printBoard();
-    game.announce();
-    return game.getWin();
+    game.print_board();
+    if(game.get_win() == 0)
+    {
+        std::cout<<"Tie"<<'\n';
+    }
+    else if(game.get_win() == 1)
+    {
+        std::cout<<"X wins"<<'\n';
+    }
+    else if(game.get_win() == 2)
+    {
+        std::cout<<"O wins"<<'\n';
+    }
+    else
+    {
+        std::cout<<"ERROR"<<'\n';
+    }
 }
+
 
 int main()
 {
-
-    std::vector<int> game1 = {1, 2, 3, 4, 5, 6};
-    //std::cout<<replayGame(game1);
-    playGame();
-    //playComputer();
+    play_game();
     return 0;
 }
